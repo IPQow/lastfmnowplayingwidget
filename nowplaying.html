@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="icon.png">
+  <title>NP Widget</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="effects.css">
+</head>
+<body>
+  <div class="container">
+    <div id="lfade" class="active"></div>
+    <img id="cover-new" class="active" src="default.png">
+    <div class="bars">
+      <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <rect class="bar bar1" x="10" y="30" width="10" height="10" rx="5" ry="5"/>
+        <rect class="bar bar2" x="25" y="30" width="10" height="10" rx="5" ry="5"/>
+        <rect class="bar bar3" x="40" y="30" width="10" height="10" rx="5" ry="5"/>
+      </svg>
+    </div>
+    <img id="coveroverlay" src="blank.png">
+    <div class="main">
+      <h2 id="name" class="active">Retrieving...</h2>
+      <h4 id="artists" class="active"></h4>
+    </div>
+  </div>
+  <script type="module" src="widget.js"></script>
+</body>
+</html>
