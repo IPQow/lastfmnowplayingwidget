@@ -18,10 +18,10 @@ The Last.fm Now Playing Widget is a dynamic widget built that displays your curr
 
 ## Features
 
-- **Multiple music providers**: As it uses lastfm, this means that it can track other platforms, not just Spotify like YouTube Music.
+- **Multiple music providers**: As it uses lastfm, this means that it can track many platforms, like Spotify, YouTube Music, Tidal, Soundcloud, Deezer, and more.
 - **Real-Time Updates**: Automatically updates to show the current track you're listening to on stream.
 - **Smooth Transitions**: Animates the update of the song name and album cover when a new track starts playing.
-- **Dynamic container**: Adjusts to make sure that the song name is always on the container ([gif 2] below showing).
+- **Dynamic container**: Adjusts to make sure that the song name is always on the container (3rd screenshot below).
 - **Easy Configuration**: Customize the username and API key via a separate `config.js` file.
 
 ## Setup
@@ -49,8 +49,8 @@ The Last.fm Now Playing Widget is a dynamic widget built that displays your curr
 3. **Include the widget in your streaming software:**
 
     - Add a new browser source in OBS (or any streaming software).
-    - Set the URL to the path where the `nowplaying.html` file is hosted or saved locally, like `file:///path/to/your/widget/nowplaying.html` *(e.g. file:///C:/Users/IPQow/Downloads/lastfmnowplayingwidget/ipq.html).*
-    - Set the dimensions to a `Height: 70px` and `Width: 500px` *(260px is the defaut width but as the widget dynamically adjusts the size of the container to the width of the song, you should leave some room, I have it at 500 and it hasn't reached there but you can set it to whatever number you want)* .
+    - Set the URL to the path where the `nowplaying.html` file is hosted or saved locally, like `file:///path/to/your/widget/nowplaying.html` *(e.g. file:///C:/Users/IPQow/Downloads/lastfmnowplayingwidget/nowplaying.html).*
+    - Set the dimensions to a `Height: 70px` and `Width: 500px` *(260px is the default width but as the widget dynamically adjusts the size of the container to the width of the song, you should leave some room, I have it at 500 and it hasn't reached there but you can set it to whatever number you want)* .
 
 ## Screenshots
 
