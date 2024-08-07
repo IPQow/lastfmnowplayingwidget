@@ -4,9 +4,9 @@
 
 ## Overview
 
-> *This project is heavily inspired by Aiden Wallis and his original Spotify widget [aidenwallis/nowplaying](https://github.com/aidenwallis/nowplaying) but since he didn't release the Spotify portion of the code, I was stuck sharing his spotify api key with everyone else that was using the widget, and such the updates sometimes took a while as requests were being rate limited, this project used his code as a base but now, only uses the principles that he used, the lastfm api integration was all developed by me and the rest of the widget. side note: I didn't like the design of his widget, it got the work done but I didn't like the green and I wanted to customise it a bit to make it look more appealing*
-
 The Last.fm Now Playing Widget is a dynamic widget built that displays your currently playing track from Last.fm in a visually engaging format for live stream viewers that changes size dynamically depending on the width of the song name to make sure that it shows the full song name. It fetches real-time data using the Last.fm API, allowing you to display the song that is currently playing in a nice and concise way.
+
+> *This project is heavily inspired by Aiden Wallis and his original Spotify widget [aidenwallis/nowplaying](https://github.com/aidenwallis/nowplaying) but since he didn't release the Spotify portion of the code, I was stuck sharing his spotify api key with everyone else that was using the widget, and such the updates sometimes took a while as requests were being rate limited. This project was built on his principles that were used in his widget but the lastfm api integration was all developed by me and the rest of the widget. Side note: I didn't like the design of his widget, it got the work done but I didn't like the green and I wanted to customise it a bit to make it look more appealing*
 
 *If anyone does decide to use this widget, please let me know by messaging me on discord @ipq or open an issue and let me know your stream link.*
 *No particular reason, it would just be cool to know that someone is using this widget! :D*
