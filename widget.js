@@ -163,7 +163,7 @@ App.openElement = function() {
 }
 
 App.updateSongName = function(artists = [], name) {
-    const maxWidth = container.offsetWidth - 70; // padding for other shit
+    const maxWidth = 190; // padding for other shit
 
     const setEllipsis = (element, text) => {
         element.textContent = text;
