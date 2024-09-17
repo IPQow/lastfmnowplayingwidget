@@ -38,42 +38,54 @@ App.firstAlbumLoad = true;
 App.scrollingSong = false;
 App.scrollingArtists = false;
 
-App.fetchUser = function() {
+App.fetchUser = function () {
     return fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apikeylfm}&format=json`)
-        .then(function(response) {
+        .then(function (response) {
             if (response.status !== 200) {
                 return timeoutPromise(2000)
-                    .then(function() {
+                    .then(function () {
                         return App.fetchUser();
                     });
             }
             return response.json();
         })
-        .then(function(data) {
+        .then(function (data) {
             App.user = data;
             return data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
             return timeoutPromise(2000)
-                .then(function() {
+                .then(function () {
                     return App.fetchUser();
                 });
         });
 };
 
-App.checkSong = function() {
+App.wasPlaying = false;
+App.retryCount = 0;
+
+App.checkSong = function () {
     return App.fetchUser()
-        .then(function(data) {
+        .then(function (data) {
             var track = data.recenttracks.track[0];
             if (!track['@attr'] || !track['@attr'].nowplaying) {
-                // No song playing.
-                if (App.open) {
-                    App.close();
-                }
-                return timeoutPromise(5000)
-                    .then(function() {
+                if (App.wasPlaying) {
+                    if (App.retryCount < 3) {
+                        App.retryCount++;
+                        console.log('No song playing, retry: ' + App.retryCount + '/3');
+                        return timeoutPromise(1000).then(function () {
+                            return App.checkSong();
+                        });
+                    } else {
+                        App.close();
+                        App.retryCount = 0;
+                        App.wasPlaying = false;
+                    }
+                } else {
+                    return timeoutPromise(1000).then(function () {
                         App.checkSong();
                     });
+                }
             } else {
                 const data = {
                     songName: makeSongName(track),
@@ -86,28 +98,29 @@ App.checkSong = function() {
                 } else {
                     App.openElement();
                     return timeoutPromise(1200)
-                        .then(function() {
+                        .then(function () {
                             App.startUpdate(data);
-                            return timeoutPromise(5000);
-                        }).then(function() {
+                            return timeoutPromise(1000);
+                        }).then(function () {
                             App.checkSong();
                         });
                 }
+                App.wasPlaying = true;
+                App.retryCount = 0;
             }
-            return timeoutPromise(5000).then(function() {
+            return timeoutPromise(1000).then(function () {
                 App.checkSong();
             });
         })
-        .catch(function(error) {
+        .catch(function (error) {
             console.error(error);
-            return timeoutPromise(5000)
-                .then(function() {
-                    App.checkSong();
-                });
+            return timeoutPromise(1000).then(function () {
+                App.checkSong();
+            });
         });
 };
 
-App.close = function() {
+App.close = function () {
     App.open = false;
     App.firstAlbumLoad = true;
     App.currentCover = '';
@@ -119,10 +132,10 @@ App.close = function() {
     lfade.classList.add('active');
     songName.classList.remove('active');
     coveroverlay.classList.add('active');
-    setTimeout(function() {
+    setTimeout(function () {
         artistsElement.classList.remove('active');
     }, 350);
-    setTimeout(function() {
+    setTimeout(function () {
         songName.innerHTML = '';
         artistsElement.innerHTML = '';
         songName.className = '';
@@ -131,10 +144,10 @@ App.close = function() {
         App.scrollingArtists = false;
         container.classList.remove('active');
     }, 800);
-    setTimeout(function() {
+    setTimeout(function () {
         container.classList.remove('raise');
     }, 1350);
-    setTimeout(function() {
+    setTimeout(function () {
         currentAlbumCover.src = '';
         currentAlbumCover.classList.remove('active');
         newAlbumCover.src = '';
@@ -142,10 +155,11 @@ App.close = function() {
     }, 1800);
 };
 
-App.startUpdate = function(data) {
+App.startUpdate = function (data) {
     if (App.currentSong !== data.songName) {
         App.currentSong = data.songName;
         App.updateSongName(data.artists, data.title);
+        App.updateCover(data.albumCover);
     }
     if (App.currentCover !== data.albumCover) {
         App.currentCover = data.albumCover;
@@ -153,14 +167,14 @@ App.startUpdate = function(data) {
     }
 };
 
-App.openElement = function() {
+App.openElement = function () {
     App.open = true;
     container.classList.add('raise');
-    setTimeout(function() {
+    setTimeout(function () {
         container.classList.add('active');
         lfade.classList.add('active');
     }, 550);
-}
+};
 
 App.updateSongName = function(artists = [], name) {
     const maxWidth = 190; // padding for other shit
@@ -198,20 +212,20 @@ App.updateSongName = function(artists = [], name) {
     }, 600);
 };
 
-App.updateCover = function(cover) {
-    setTimeout(function() {
+App.updateCover = function (cover) {
+    setTimeout(function () {
         bar1.classList.remove('active');
         bar2.classList.remove('active');
         bar3.classList.remove('active');
     }, 250);
     coveroverlay.classList.add('active');
-    setTimeout(function() {
+    setTimeout(function () {
         newAlbumCover.src = cover;
-        newAlbumCover.onload = function() {
-        newAlbumCover.classList.add('active');
+        newAlbumCover.onload = function () {
+            newAlbumCover.classList.add('active');
         };
     }, 450);
-    setTimeout(function() {
+    setTimeout(function () {
         coveroverlay.classList.remove('active');
     }, 900);
     setTimeout(function () {
@@ -220,27 +234,26 @@ App.updateCover = function(cover) {
             bar2.classList.add('active');
             setTimeout(function () {
                 bar3.classList.add('active');
+                coveroverlay.classList.remove('active');
             }, 200);
         }, 200);
     }, 1200);
 };
 
-App.start = function() {
-    App.fetchUser().then(function() {
+App.start = function () {
+    App.fetchUser().then(function () {
         App.checkSong();
     });
 };
 
-//Bars
-
 document.addEventListener("DOMContentLoaded", () => {
     const bars = document.querySelectorAll('.bar');
     bars.forEach(bar => {
-      const duration = (Math.random() * 0.25 + 0.55).toFixed(2);
-      const delay = (Math.random() * 0.2).toFixed(2);
-      bar.style.animation = `pulse ${duration}s infinite ease-in-out`;
-      bar.style.animationDelay = `${delay}s`;
+        const duration = (Math.random() * 0.25 + 0.55).toFixed(2); // Random duration between 0.75s and 1.25s
+        const delay = (Math.random() * 0.2).toFixed(2); // Random delay between 0s and 0.5s
+        bar.style.animation = `pulse ${duration}s infinite ease-in-out`;
+        bar.style.animationDelay = `${delay}s`;
     });
-  });
+});
 
 App.start();
